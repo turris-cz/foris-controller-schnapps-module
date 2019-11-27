@@ -1,0 +1,226 @@
+{
+    "definitions": {
+        "number": {"type": "integer", "minimum": 1},
+        "type": {"enum": ["pre", "post", "type", "single"]},
+        "snapshot": {
+            "type": "object",
+            "properties": {
+                "number": {"$ref": "#/definitions/number"},
+                "type": {"$ref": "#/definitions/type"},
+                "created": {"type": "string"},
+                "size": {"type": "string"},
+                "description": {"type": "string"}
+            },
+            "required": ["number", "size", "description", "type", "created"],
+            "additionalProperties": false
+        }
+    },
+    "oneOf": [
+        {
+            "description": "List snapshots request",
+            "properties": {
+                "module": {"enum": ["schnapps"]},
+                "kind": {"enum": ["request"]},
+                "action": {"enum": ["list"]}
+            },
+            "additionalProperties": false
+        },
+        {
+            "description": "List snapshots reply",
+            "properties": {
+                "module": {"enum": ["schnapps"]},
+                "kind": {"enum": ["reply"]},
+                "action": {"enum": ["list"]},
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "snapshots": {
+                            "type": "array",
+                            "items": {"$ref": "#/definitions/snapshot"}
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": ["snapshots"]
+                }
+            },
+            "additionalProperties": false,
+            "required": ["data"]
+        },
+        {
+            "description": "Create snapshot request",
+            "properties": {
+                "module": {"enum": ["schnapps"]},
+                "kind": {"enum": ["request"]},
+                "action": {"enum": ["create"]},
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "description": {"type": "string"}
+                    },
+                    "additionalProperties": false,
+                    "required": ["description"]
+                }
+            },
+            "additionalProperties": false,
+            "required": ["data"]
+        },
+        {
+            "description": "Create snapshot reply",
+            "properties": {
+                "module": {"enum": ["schnapps"]},
+                "kind": {"enum": ["reply"]},
+                "action": {"enum": ["create"]},
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "number": {"$ref": "#/definitions/number"}
+                    },
+                    "additionalProperties": false,
+                    "required": ["number"]
+                }
+            },
+            "additionalProperties": false,
+            "required": ["data"]
+        },
+        {
+            "description": "Create snapshot notification",
+            "properties": {
+                "module": {"enum": ["schnapps"]},
+                "kind": {"enum": ["notification"]},
+                "action": {"enum": ["create"]},
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "number": {"$ref": "#/definitions/number"}
+                    },
+                    "additionalProperties": false,
+                    "required": ["number"]
+                }
+            },
+            "additionalProperties": false,
+            "required": ["data"]
+        },
+        {
+            "description": "Delete snapshot request",
+            "properties": {
+                "module": {"enum": ["schnapps"]},
+                "kind": {"enum": ["request"]},
+                "action": {"enum": ["delete"]},
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "number": {"$ref": "#/definitions/number"}
+                    },
+                    "additionalProperties": false,
+                    "required": ["number"]
+                }
+            },
+            "additionalProperties": false,
+            "required": ["data"]
+        },
+        {
+            "description": "Delete snapshot reply",
+            "properties": {
+                "module": {"enum": ["schnapps"]},
+                "kind": {"enum": ["reply"]},
+                "action": {"enum": ["delete"]},
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "result": {"type": "boolean"}
+                    },
+                    "additionalProperties": false,
+                    "required": ["result"]
+                }
+            },
+            "additionalProperties": false,
+            "required": ["data"]
+        },
+        {
+            "description": "Delete snapshot notification",
+            "properties": {
+                "module": {"enum": ["schnapps"]},
+                "kind": {"enum": ["notification"]},
+                "action": {"enum": ["delete"]},
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "number": {"$ref": "#/definitions/number"}
+                    },
+                    "additionalProperties": false,
+                    "required": ["number"]
+                }
+            },
+            "additionalProperties": false,
+            "required": ["data"]
+        },
+        {
+            "description": "Rollback snapshot request",
+            "properties": {
+                "module": {"enum": ["schnapps"]},
+                "kind": {"enum": ["request"]},
+                "action": {"enum": ["rollback"]},
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "number": {"$ref": "#/definitions/number"}
+                    },
+                    "additionalProperties": false,
+                    "required": ["number"]
+                }
+            },
+            "additionalProperties": false,
+            "required": ["data"]
+        },
+        {
+            "description": "Rollback snapshot reply",
+            "properties": {
+                "module": {"enum": ["schnapps"]},
+                "kind": {"enum": ["reply"]},
+                "action": {"enum": ["rollback"]},
+                "data": {
+                    "oneOf": [
+                        {
+                            "type": "object",
+                            "properties": {
+                                "result": {"enum": [false]}
+                            },
+                            "additionalProperties": false,
+                            "required": ["result"]
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "result": {"enum": [true]},
+                                "shifted": {"type": "array", "items":{"$ref": "#/definitions/number"}} 
+                            },
+                            "additionalProperties": false,
+                            "required": ["result", "shifted"]
+                        }
+                    ]
+                }
+            },
+            "additionalProperties": false,
+            "required": ["data"]
+        },
+        {
+            "description": "Rollback snapshot notification",
+            "properties": {
+                "module": {"enum": ["schnapps"]},
+                "kind": {"enum": ["notification"]},
+                "action": {"enum": ["rollback"]},
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "number": {"$ref": "#/definitions/number"},
+                        "shifted": {"type": "array", "items":{"$ref": "#/definitions/number"}} 
+                    },
+                    "additionalProperties": false,
+                    "required": ["number", "shifted"]
+                }
+            },
+            "additionalProperties": false,
+            "required": ["data"]
+        }
+    ]
+}
