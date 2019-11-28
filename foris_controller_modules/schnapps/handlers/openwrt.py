@@ -35,14 +35,6 @@ class OpenwrtSchnappsHandler(Handler, BaseOpenwrtHandler):
     cmds = SchnappsCmds()
 
     @logger_wrapper(logger)
-    def get_slices(self):
-        return OpenwrtSchnappsHandler.cmds.get_slices()
-
-    @logger_wrapper(logger)
-    def set_slices(self, value):
-        return OpenwrtSchnappsHandler.uci.set_slices(value)
-
-    @logger_wrapper(logger)
     def list(self) -> dict:
         return OpenwrtSchnappsHandler.cmds.list()
 

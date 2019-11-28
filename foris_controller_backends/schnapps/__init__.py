@@ -40,14 +40,14 @@ class SchnappsCmds(BaseCmdLine):
         return int(res.group(1))
 
     def delete(self, number: int) -> bool:
-        ret, stdout, _ = self._run_command("/usr/bin/schnapps", "delete", str(number))
+        ret, _, _ = self._run_command("/usr/bin/schnapps", "delete", str(number))
         return ret == 0
 
     def rollback(self, number: int) -> typing.Tuple[bool, typing.Optional[typing.List[int]]]:
         snapshots = self.list()["snapshots"]
-        ret, stdout, _ = self._run_command("/usr/bin/schnapps", "rollback", str(number))
+        ret, _, _ = self._run_command("/usr/bin/schnapps", "rollback", str(number))
         self._run_command("/usr/bin/maintain-reboot-needed")  # best effort
         if ret == 0:
             return True, [e["number"] for e in snapshots if e["number"] > number]
-        else:
-            return False, None
+
+        return False, None
