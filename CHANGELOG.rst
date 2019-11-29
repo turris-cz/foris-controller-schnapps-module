@@ -1,4 +1,4 @@
-0.0 (YYYY-MM-DD)
+0.1 (2019-11-30)
 ----------------
 
-* some change
+* initial functionality
