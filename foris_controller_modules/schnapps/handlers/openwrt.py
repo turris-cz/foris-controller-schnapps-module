@@ -39,7 +39,7 @@ class OpenwrtSchnappsHandler(Handler, BaseOpenwrtHandler):
         return OpenwrtSchnappsHandler.cmds.list()
 
     @logger_wrapper(logger)
-    def create(self, description: str) -> int:
+    def create(self, description: str) -> typing.Optional[int]:
         return OpenwrtSchnappsHandler.cmds.create(description)
 
     @logger_wrapper(logger)

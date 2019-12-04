@@ -71,12 +71,25 @@
                 "kind": {"enum": ["reply"]},
                 "action": {"enum": ["create"]},
                 "data": {
-                    "type": "object",
-                    "properties": {
-                        "number": {"$ref": "#/definitions/number"}
-                    },
-                    "additionalProperties": false,
-                    "required": ["number"]
+                    "oneOf": [
+                        {
+                            "type": "object",
+                            "properties": {
+                                "number": {"$ref": "#/definitions/number"},
+                                "result": {"enum": [true]}
+                            },
+                            "additionalProperties": false,
+                            "required": ["number", "result"]
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "result": {"enum": [false]}
+                            },
+                            "additionalProperties": false,
+                            "required": ["result"]
+                        }
+                    ]
                 }
             },
             "additionalProperties": false,

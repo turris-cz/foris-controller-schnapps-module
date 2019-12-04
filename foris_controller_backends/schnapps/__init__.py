@@ -28,11 +28,21 @@ logger = logging.getLogger(__name__)
 
 
 class SchnappsCmds(BaseCmdLine):
+    def _test_btrfs(self) -> bool:
+        stdout, _ = self._run_command_and_check_retval(["/usr/bin/mount"], 0)
+        return " / type btrfs" in stdout.decode()
+
     def list(self) -> dict:
+        if not self._test_btrfs():
+            return {"snapshots": []}
+
         stdout, _ = self._run_command_and_check_retval(["/usr/bin/schnapps", "list", "-j"], 0)
         return json.loads(stdout.strip())
 
-    def create(self, description: str) -> int:
+    def create(self, description: str) -> typing.Optional[int]:
+        if not self._test_btrfs():
+            return None
+
         stdout, _ = self._run_command_and_check_retval(
             ["/usr/bin/schnapps", "create", "-t", "single", description], 0
         )
@@ -40,10 +50,16 @@ class SchnappsCmds(BaseCmdLine):
         return int(res.group(1))
 
     def delete(self, number: int) -> bool:
+        if not self._test_btrfs():
+            return False
+
         ret, _, _ = self._run_command("/usr/bin/schnapps", "delete", str(number))
         return ret == 0
 
     def rollback(self, number: int) -> typing.Tuple[bool, typing.Optional[typing.List[int]]]:
+        if not self._test_btrfs():
+            return False, None
+
         snapshots = self.list()["snapshots"]
         ret, _, _ = self._run_command("/usr/bin/schnapps", "rollback", str(number))
         self._run_command("/usr/bin/maintain-reboot-needed")  # best effort

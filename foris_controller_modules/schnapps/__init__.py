@@ -30,9 +30,11 @@ class SchnappsModule(BaseModule):
         return self.handler.list()
 
     def action_create(self, data: dict) -> dict:
-        res = self.handler.create(**data)
-        self.notify("create", {"number": res})
-        return {"number": res}
+        number = self.handler.create(**data)
+        if number is not None:
+            self.notify("create", {"number": number})
+            return {"number": number, "result": True}
+        return {"result": False}
 
     def action_delete(self, data: dict) -> dict:
         res = self.handler.delete(**data)

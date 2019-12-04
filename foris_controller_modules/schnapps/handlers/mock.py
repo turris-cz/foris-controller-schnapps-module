@@ -40,7 +40,7 @@ class MockSchnappsHandler(Handler, BaseMockHandler):
         return {"snapshots": MockSchnappsHandler.snapshots}
 
     @logger_wrapper(logger)
-    def create(self, description: str) -> int:
+    def create(self, description: str) -> typing.Optional[int]:
         MockSchnappsHandler.idx += 1
         MockSchnappsHandler.snapshots.append(
             {
