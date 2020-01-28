@@ -1,7 +1,7 @@
 {
     "definitions": {
         "number": {"type": "integer", "minimum": 1},
-        "type": {"enum": ["pre", "post", "type", "single"]},
+        "type": {"enum": ["pre", "post", "type", "single", "rollback"]},
         "snapshot": {
             "type": "object",
             "properties": {
