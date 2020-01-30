@@ -121,9 +121,29 @@ def init_snapshots():
             },
             f,
         )
-
     yield
+    path.unlink()
 
+
+@pytest.fixture(scope="function")
+def init_snapshots_bad_description():
+    path = pathlib.Path("/tmp/test-schnapps.json")
+    with path.open("w") as f:
+        json.dump(
+            {
+                "snapshots": [
+                    {
+                        "number": 1,
+                        "created": "2019-11-27 14:15:27 +0000",
+                        "type": "single",
+                        "size": "74.16MiB",
+                        "description": "A"*51,
+                    }
+                ]
+            },
+            f,
+        )
+    yield
     path.unlink()
 
 
@@ -134,6 +154,14 @@ def test_list(infrastructure, start_buses, init_snapshots, mount_cmd_with_btrf):
     assert "error" not in res
     assert "data" in res
     assert "snapshots" in res["data"]
+
+
+@pytest.mark.only_backends(["openwrt"])
+def test_list_error(infrastructure, start_buses, init_snapshots_bad_description, mount_cmd_with_btrf):
+    res = infrastructure.process_message(
+        {"module": "schnapps", "action": "list", "kind": "request"}
+    )
+    assert "maxLength" in res["errors"][0]["stacktrace"]
 
 
 def test_create(infrastructure, start_buses, init_snapshots, mount_cmd_with_btrf):
