@@ -137,7 +137,7 @@ def init_snapshots_bad_description():
                         "created": "2019-11-27 14:15:27 +0000",
                         "type": "single",
                         "size": "74.16MiB",
-                        "description": "A"*51,
+                        "description": "A"*1025,
                     }
                 ]
             },

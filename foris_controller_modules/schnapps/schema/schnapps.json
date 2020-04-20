@@ -2,7 +2,7 @@
     "definitions": {
         "number": {"type": "integer", "minimum": 1},
         "type": {"enum": ["pre", "post", "time", "single", "rollback"]},
-        "description": {"type": "string", "maxLength": 50},
+        "description": {"type": "string", "maxLength": 1024},
         "snapshot": {
             "type": "object",
             "properties": {
