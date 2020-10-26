@@ -1,6 +1,6 @@
 #
 # foris-controller-schnapps-module
-# Copyright (C) 2019 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
+# Copyright (C) 2019-2020 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -67,3 +67,15 @@ class SchnappsCmds(BaseCmdLine):
             return True, [e["number"] for e in snapshots if e["number"] > number]
 
         return False, None
+
+    def factory_reset(self) -> bool:
+        if not self._test_btrfs():
+            return False
+
+        ret, _, _ = self._run_command("/usr/bin/schnapps", "rollback", "factory")
+
+        if ret != 0:
+            return False
+
+        self._run_command("/usr/bin/maintain-reboot")
+        return True

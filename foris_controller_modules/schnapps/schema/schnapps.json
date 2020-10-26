@@ -235,6 +235,32 @@
             },
             "additionalProperties": false,
             "required": ["data"]
+        },
+        {
+            "description": "Factory reset request",
+            "properties": {
+                "module": {"enum": ["schnapps"]},
+                "kind": {"enum": ["request"]},
+                "action": {"enum": ["factory_reset"]}
+            },
+            "additionalProperties": false
+        },
+        {
+            "description": "Rollback snapshot reply",
+            "properties": {
+                "module": {"enum": ["schnapps"]},
+                "kind": {"enum": ["reply"]},
+                "action": {"enum": ["factory_reset"]},
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "result": {"type": "boolean"}
+                    },
+                    "additionalProperties": false,
+                    "required": ["result"]
+                }
+            },
+            "required": ["data"]
         }
     ]
 }

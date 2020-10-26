@@ -1,0 +1,10 @@
+## misc
+~*
+
+## python
+**/*.pyc
+foris_controller_schnapps_module.egg-info
+.eggs/
+
+## Ide
+.vscode

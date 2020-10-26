@@ -61,11 +61,13 @@ def handle_delete(options):
 def handle_rollback(options):
     data = load_data()
     ids = [e["number"] for e in data["snapshots"]]
-    if options.id not in ids:
-        return 1
-
-    return 0
-
+    if options.id.isdigit():
+        if int(options.id) not in ids:
+            return 1
+        return 0
+    elif options.id == "factory":
+        return 0
+    return 1
 
 CMD_MAP = {
     "list": handle_list,
@@ -93,7 +95,7 @@ def main():
     delete_cmd.add_argument("id", type=int)
 
     rollback_cmd = subcmds.add_parser("rollback")
-    rollback_cmd.add_argument("id", type=int)
+    rollback_cmd.add_argument("id")
 
     options = parser.parse_args()
     sys.exit(CMD_MAP[options.cmd](options))

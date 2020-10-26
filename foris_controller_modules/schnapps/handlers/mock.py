@@ -1,6 +1,6 @@
 #
 # foris-controller-schnapps-module
-# Copyright (C) 2019 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
+# Copyright (C) 2019-2020 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -69,3 +69,7 @@ class MockSchnappsHandler(Handler, BaseMockHandler):
         if number not in ids:
             return False, None
         return True, [e["number"] for e in MockSchnappsHandler.snapshots if e["number"] > number]
+
+    @logger_wrapper(logger)
+    def factory_reset(self) -> bool:
+        return True

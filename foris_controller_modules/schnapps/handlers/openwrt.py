@@ -49,3 +49,7 @@ class OpenwrtSchnappsHandler(Handler, BaseOpenwrtHandler):
     @logger_wrapper(logger)
     def rollback(self, number: int) -> typing.Tuple[bool, typing.Optional[typing.List[int]]]:
         return OpenwrtSchnappsHandler.cmds.rollback(number)
+
+    @logger_wrapper(logger)
+    def factory_reset(self) -> bool:
+        return OpenwrtSchnappsHandler.cmds.factory_reset()

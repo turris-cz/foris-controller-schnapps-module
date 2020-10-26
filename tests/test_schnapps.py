@@ -1,6 +1,6 @@
 #
 # foris-controller-schnapps-module
-# Copyright (C) 2019 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
+# Copyright (C) 2019-2020 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ from foris_controller_testtools.utils import FileFaker
 
 
 @pytest.fixture(scope="function")
-def mount_cmd_with_btrf(cmdline_script_root):
+def mount_cmd_with_btrfs(cmdline_script_root):
     content = """\
         #!/bin/bash
         cat << EOF
@@ -56,7 +56,7 @@ def mount_cmd_with_btrf(cmdline_script_root):
 
 
 @pytest.fixture(scope="function")
-def mount_cmd_with_nobtrf(cmdline_script_root):
+def mount_cmd_with_nobtrfs(cmdline_script_root):
     content = """\
         #!/bin/bash
         cat << EOF
@@ -147,7 +147,7 @@ def init_snapshots_bad_description():
     path.unlink()
 
 
-def test_list(infrastructure, start_buses, init_snapshots, mount_cmd_with_btrf):
+def test_list(infrastructure, start_buses, init_snapshots, mount_cmd_with_btrfs):
     res = infrastructure.process_message(
         {"module": "schnapps", "action": "list", "kind": "request"}
     )
@@ -157,14 +157,14 @@ def test_list(infrastructure, start_buses, init_snapshots, mount_cmd_with_btrf):
 
 
 @pytest.mark.only_backends(["openwrt"])
-def test_list_error(infrastructure, start_buses, init_snapshots_bad_description, mount_cmd_with_btrf):
+def test_list_error(infrastructure, start_buses, init_snapshots_bad_description, mount_cmd_with_btrfs):
     res = infrastructure.process_message(
         {"module": "schnapps", "action": "list", "kind": "request"}
     )
     assert "maxLength" in res["errors"][0]["stacktrace"]
 
 
-def test_create(infrastructure, start_buses, init_snapshots, mount_cmd_with_btrf):
+def test_create(infrastructure, start_buses, init_snapshots, mount_cmd_with_btrfs):
     filters = [("schnapps", "create")]
 
     notifications = infrastructure.get_notifications(filters=filters)
@@ -194,7 +194,7 @@ def test_create(infrastructure, start_buses, init_snapshots, mount_cmd_with_btrf
     assert "created" in res["data"]["snapshots"][-1]
 
 
-def test_delete(infrastructure, start_buses, init_snapshots, mount_cmd_with_btrf):
+def test_delete(infrastructure, start_buses, init_snapshots, mount_cmd_with_btrfs):
     def create(description: str) -> int:
         return infrastructure.process_message(
             {
@@ -231,7 +231,7 @@ def test_delete(infrastructure, start_buses, init_snapshots, mount_cmd_with_btrf
     assert second in ids
 
 
-def test_rollback(infrastructure, start_buses, init_snapshots, mount_cmd_with_btrf):
+def test_rollback(infrastructure, start_buses, init_snapshots, mount_cmd_with_btrfs):
     def create(description: str) -> int:
         return infrastructure.process_message(
             {
@@ -268,7 +268,7 @@ def test_rollback(infrastructure, start_buses, init_snapshots, mount_cmd_with_bt
 
 
 @pytest.mark.only_backends(["openwrt"])
-def test_list_nobtrfs(infrastructure, start_buses, init_snapshots, mount_cmd_with_nobtrf):
+def test_list_nobtrfs(infrastructure, start_buses, init_snapshots, mount_cmd_with_nobtrfs):
     assert (
         len(
             infrastructure.process_message(
@@ -280,7 +280,7 @@ def test_list_nobtrfs(infrastructure, start_buses, init_snapshots, mount_cmd_wit
 
 
 @pytest.mark.only_backends(["openwrt"])
-def test_create_nobtrfs(infrastructure, start_buses, init_snapshots, mount_cmd_with_nobtrf):
+def test_create_nobtrfs(infrastructure, start_buses, init_snapshots, mount_cmd_with_nobtrfs):
     assert (
         infrastructure.process_message(
             {
@@ -295,7 +295,7 @@ def test_create_nobtrfs(infrastructure, start_buses, init_snapshots, mount_cmd_w
 
 
 @pytest.mark.only_backends(["openwrt"])
-def test_delete_nobtrfs(infrastructure, start_buses, init_snapshots, mount_cmd_with_nobtrf):
+def test_delete_nobtrfs(infrastructure, start_buses, init_snapshots, mount_cmd_with_nobtrfs):
     assert (
         infrastructure.process_message(
             {"module": "schnapps", "action": "delete", "kind": "request", "data": {"number": 1}}
@@ -305,10 +305,25 @@ def test_delete_nobtrfs(infrastructure, start_buses, init_snapshots, mount_cmd_w
 
 
 @pytest.mark.only_backends(["openwrt"])
-def test_rollback_nobtrfs(infrastructure, start_buses, init_snapshots, mount_cmd_with_nobtrf):
+def test_rollback_nobtrfs(infrastructure, start_buses, init_snapshots, mount_cmd_with_nobtrfs):
     assert (
         infrastructure.process_message(
             {"module": "schnapps", "action": "rollback", "kind": "request", "data": {"number": 1}}
         )["data"]["result"]
         is False
     )
+
+def test_factory_reset_btrfs(infrastructure, init_snapshots, mount_cmd_with_btrfs):
+    res =  infrastructure.process_message(
+        {"module": "schnapps", "action": "factory_reset", "kind": "request"}
+    )
+    assert "errors" not in res.keys()
+    assert res["data"]["result"]
+
+@pytest.mark.only_backends(["openwrt"])
+def test_factory_reset_nobtrfs(infrastructure, init_snapshots, mount_cmd_with_nobtrfs):
+    res = infrastructure.process_message(
+        {"module": "schnapps", "action": "factory_reset", "kind": "request"}
+    )
+    assert "errors" not in res.keys()
+    assert res["data"]["result"] is False
