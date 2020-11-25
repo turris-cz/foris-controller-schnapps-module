@@ -206,7 +206,7 @@
                             "type": "object",
                             "properties": {
                                 "result": {"enum": [true]},
-                                "shifted": {"type": "array", "items":{"$ref": "#/definitions/number"}} 
+                                "shifted": {"type": "array", "items":{"$ref": "#/definitions/number"}}
                             },
                             "additionalProperties": false,
                             "required": ["result", "shifted"]
@@ -227,7 +227,7 @@
                     "type": "object",
                     "properties": {
                         "number": {"$ref": "#/definitions/number"},
-                        "shifted": {"type": "array", "items":{"$ref": "#/definitions/number"}} 
+                        "shifted": {"type": "array", "items":{"$ref": "#/definitions/number"}}
                     },
                     "additionalProperties": false,
                     "required": ["number", "shifted"]
