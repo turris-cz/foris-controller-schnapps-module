@@ -1,5 +1,5 @@
 Foris Controller Schnapps module
-==============================
+================================
 This is a schnapps module for foris-controller
 
 Requirements
@@ -11,4 +11,12 @@ Requirements
 Installation
 ============
 
-	``python3 setup.py install``
+	``pip install .``
+
+Running tests
+=============
+
+.. code-block:: sh
+
+    git submodule update --init
+    tox -q -e py39

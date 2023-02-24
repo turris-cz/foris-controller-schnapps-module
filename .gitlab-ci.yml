@@ -1,8 +1,9 @@
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
 before_script:
-  - pip install virtualenv
-  - virtualenv -p "$(which python)" /tmp/test
-  - source /tmp/test/bin/activate
-  - pip install .
+  - pip install wheel
+  - pip install tox
 
 .base_image: &py3_common
   image: registry.nic.cz/turris/foris-ci/python3
@@ -10,9 +11,9 @@ before_script:
 flake8:
   <<: *py3_common
   script:
-    - python setup.py flake8
+    - tox -q -e lint
 
 test_python3:
   <<: *py3_common
   script:
-    - python setup.py test --addopts="--backend openwrt --backend mock"
+    - tox -q -e py39 -- --backend openwrt --backend mock
