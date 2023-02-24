@@ -1,6 +1,6 @@
 #
 # foris-controller-schnapps-module
-# Copyright (C) 2019-2020 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
+# Copyright (C) 2019-2021, 2023 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -137,7 +137,7 @@ def init_snapshots_bad_description():
                         "created": "2019-11-27 14:15:27 +0000",
                         "type": "single",
                         "size": "74.16MiB",
-                        "description": "A"*1025,
+                        "description": "A" * 1025,
                     }
                 ]
             },
@@ -313,12 +313,14 @@ def test_rollback_nobtrfs(infrastructure, start_buses, init_snapshots, mount_cmd
         is False
     )
 
+
 def test_factory_reset_btrfs(infrastructure, init_snapshots, mount_cmd_with_btrfs):
-    res =  infrastructure.process_message(
+    res = infrastructure.process_message(
         {"module": "schnapps", "action": "factory_reset", "kind": "request"}
     )
     assert "errors" not in res.keys()
     assert res["data"]["result"]
+
 
 @pytest.mark.only_backends(["openwrt"])
 def test_factory_reset_nobtrfs(infrastructure, init_snapshots, mount_cmd_with_nobtrfs):
