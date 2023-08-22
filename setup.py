@@ -1,6 +1,6 @@
 #
 # foris-controller-schnapps-module
-# Copyright (C) 2019-2020, 2023 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
+# Copyright (C) 2019-2023, 2023 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -42,18 +42,8 @@ setup(
     namespace_packages=["foris_controller_modules", "foris_controller_backends"],
     description=DESCRIPTION,
     long_description=open("README.rst").read(),
-    install_requires=[
-        "foris-controller @ git+https://gitlab.nic.cz/turris/foris-controller/foris-controller.git"
-    ],
-    extras_require={
-        "tests": {
-            "pytest",
-            "foris-controller-testtools @ git+https://gitlab.nic.cz/turris/foris-controller/foris-controller-testtools.git",
-            "foris-client @ git+https://gitlab.nic.cz/turris/foris-controller/foris-client.git",
-            "ubus",
-            "paho-mqtt"
-        }
-    },
+    install_requires=["foris-controller"],
+    tests_require=["pytest", "foris-controller-testtools", "foris-client", "ubus", "paho-mqtt"],
     include_package_data=True,
     zip_safe=False,
 )
