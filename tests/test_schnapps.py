@@ -1,6 +1,6 @@
 #
 # foris-controller-schnapps-module
-# Copyright (C) 2019-2021, 2023 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
+# Copyright (C) 2019-2023 CZ.NIC, z.s.p.o. (http://www.nic.cz/)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,16 +22,6 @@ import pathlib
 import pytest
 import textwrap
 
-from foris_controller_testtools.fixtures import (
-    only_message_buses,
-    backend,
-    infrastructure,
-    start_buses,
-    mosquitto_test,
-    ubusd_test,
-    notify_api,
-    only_backends,
-)
 from foris_controller_testtools.utils import FileFaker
 
 
